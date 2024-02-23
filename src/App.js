@@ -3,6 +3,7 @@ import Header from './Header';
 import TodoContent from './TodoContent';
 import Footer from './Footer';
 import { useState } from "react";
+import AddItem from './AddItem';
 
 
 function App() {
@@ -22,6 +23,7 @@ const handleDelete = (id) => {
   return (
     <div className='App'>
       <Header/>
+      <AddItem/>
       <TodoContent 
       item = {item}
       handleChange = {handleChange}
