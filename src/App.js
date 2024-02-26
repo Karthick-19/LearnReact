@@ -7,21 +7,20 @@ import AddItem from './AddItem';
 
 
 function App() {
-  const [items,setItems] = useState(
-    [{id:1,checked:true,item:"React Coding"},
-    {id:2,checked:false,item:"Angular Coding"},
-    {id:3,checked:true,item:"Spring Coding"}]);
+  const [items,setItems] = useState(JSON.parse(localStorage.getItem('todo_list')));
 
   const handleChange = (id) => {
     const listItems = items.map((item) => 
         item.id === id ? {...item,checked:!item.checked} : item
     )
     setItems(listItems)
+    localStorage.setItem("todo_list",JSON.stringify(listItems))
   }
 
   const handleDelete = (id) => {
     const delItems = items.filter((item) => item.id !== id)
     setItems(delItems)
+    localStorage.setItem("todo_list",JSON.stringify(delItems))
     // console.log('Delete Works')
 }
 
@@ -32,6 +31,7 @@ const addItem = (item) => {
   const addnewItem = {id,checked:false,item};
   const listItems = [...items,addnewItem];
   setItems(listItems);
+  localStorage.setItem("todo_list",JSON.stringify(listItems))
 }
 
 const handleSubmit = (e) => {
@@ -40,6 +40,7 @@ const handleSubmit = (e) => {
   if (!newItem) return;
   addItem(newItem)
   SetnewItem('')
+  
 }
   return (
     <div className='App'>
