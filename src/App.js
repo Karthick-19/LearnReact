@@ -4,10 +4,15 @@ import TodoContent from './TodoContent';
 import Footer from './Footer';
 import { useState } from "react";
 import AddItem from './AddItem';
+import { useEffect } from 'react';
 
 
 function App() {
-  const [items,setItems] = useState(JSON.parse(localStorage.getItem('todo_list')));
+  const [items,setItems] = useState([]);
+
+  useEffect(()=>{
+    JSON.parse(localStorage.getItem('todo_list'))
+  },[])
 
   const handleChange = (id) => {
     const listItems = items.map((item) => 
