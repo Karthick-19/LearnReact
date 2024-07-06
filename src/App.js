@@ -1,70 +1,63 @@
-import Header from './Header';
-// import Content from './Content';
-import TodoContent from './TodoContent';
-import Footer from './Footer';
-import { useState } from "react";
-import AddItem from './AddItem';
-import { useEffect } from 'react';
-
+import './App.css';
+import { useEffect, useState } from 'react';
+import Result from './Result';
+import Difficulty from './Difficulty';
 
 function App() {
-  const [items,setItems] = useState([]);
+  const [num, setNum] = useState("");
+  const [difficulty, setDifficulty] = useState('Easy');
+  const [secretNum, setSecretNum] = useState(null);
+  const [range, setRange] = useState(11); // Initialize with Easy range
 
-  useEffect(()=>{
-    JSON.parse(localStorage.getItem('todo_list'))
-  },[])
+  const handleChange = (e) => {
+    setNum(e.target.value);
+  };
 
-  const handleChange = (id) => {
-    const listItems = items.map((item) => 
-        item.id === id ? {...item,checked:!item.checked} : item
-    )
-    setItems(listItems)
-    localStorage.setItem("todo_list",JSON.stringify(listItems))
-  }
+  const handleDifficulty = (e) => {
+    setDifficulty(e.target.value);
+  };
 
-  const handleDelete = (id) => {
-    const delItems = items.filter((item) => item.id !== id)
-    setItems(delItems)
-    localStorage.setItem("todo_list",JSON.stringify(delItems))
-    // console.log('Delete Works')
-}
+  //Why useEffect is uesd?
+  // Functionality: This useEffect hook recalculates the range and generates a new secretNum whenever the difficulty state changes.
 
-const [newItem,SetnewItem] = useState('')
+  // Dependency Array ([difficulty]): This array specifies which variables or state values the useEffect depends on. In this case, [difficulty] means that the effect should re-run whenever the difficulty state variable changes.
 
-const addItem = (item) => {
-  const id = items.length ? items[items.length - 1].id + 1 : 1;
-  const addnewItem = {id,checked:false,item};
-  const listItems = [...items,addnewItem];
-  setItems(listItems);
-  localStorage.setItem("todo_list",JSON.stringify(listItems))
-}
+  // Execution: When the component mounts (initial render) and every time difficulty changes thereafter, the code inside useEffect recalculates range based on the selected difficulty and generates a new random secretNum.
+  useEffect(() => {
+    let newRange;
+    if (difficulty === "Easy") {
+      newRange = 11;
+    } else if (difficulty === "Medium") {
+      newRange = 51;
+    } else {
+      newRange = 101;
+    }
 
-const handleSubmit = (e) => {
-  e.preventDefault()
-  // console.log(newItem)
-  if (!newItem) return;
-  addItem(newItem)
-  SetnewItem('')
-  
-}
+    setRange(newRange);
+
+    // Generates a random number from 1 to the newRange (exclusive)
+    const secretNum = Math.floor(Math.random() * newRange);
+    setSecretNum(secretNum);
+  }, [difficulty]);
+
   return (
-    <div className='App'>
-      <Header/>
-      <AddItem
-      newItem = {newItem}
-      SetnewItem = {SetnewItem}
-      handleSubmit = {handleSubmit}
+    <div className="container">
+      <div className="head">
+        <label htmlFor='term'>
+          Guess the number between 1 to {range - 1} ({secretNum})
+        </label>
+      </div>
+      <input id='term' type='text' name='term' onChange={handleChange} />
+      {/* Pass the secretNum and num to Result component for further logic */}
+      <Result
+        secretNum={secretNum}
+        num={num}
       />
-      <TodoContent 
-      item = {items}
-      handleChange = {handleChange}
-      handleDelete = {handleDelete}
+      <Difficulty
+        difficulty={difficulty}
+        handleDifficulty={handleDifficulty}
       />
-      <Footer
-      length = {items.length}
-      />
-    </div> 
-    
+    </div>
   );
 }
 

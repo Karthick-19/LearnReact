@@ -1,0 +1,29 @@
+body{
+  background-color: gray;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15%;
+}
+
+.container{
+  padding: 10px;
+  border: white 2px solid;
+  width: 500px;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+
+.head{
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+input{
+  border: 1px solid black;
+  padding: 10px;
+  border-radius: 5px;
+}
